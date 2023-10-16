@@ -22,10 +22,10 @@ const Register = () => {
             .then(result => {
                 console.log(result.user)
 
-                const createdAt=result.user?.metadata?.creationTime;
+                const createdAt = result.user?.metadata?.creationTime;
 
                 // backend
-                const user = { name, email, password, createdAt:createdAt }
+                const user = { name, email, password, createdAt: createdAt }
 
                 fetch("http://localhost:5000/user", {
                     method: "POST",
@@ -42,7 +42,8 @@ const Register = () => {
                     })
             })
             .catch(error => {
-                console.log(error.error)
+                Swal.fire({ title: 'Sorry!', text: `${error.message.slice(10,60)}`, icon: 'error', })
+                console.log(error)
             })
 
 

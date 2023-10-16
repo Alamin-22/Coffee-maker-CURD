@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 const LOgin = () => {
+    const { LoginUser } = useContext(AuthContext);
+    // console.log(LoginUser)
     const [showPassword, setShowPassword] = useState(null)
+
+
+
 
     const handleLogin = e => {
         e.preventDefault();
@@ -11,6 +17,12 @@ const LOgin = () => {
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
+        // login user
+        LoginUser(email, password)
+        .then(res=> console.log(res))
+        .catch(error=>{
+            console.log(error)
+        })
     }
 
 
