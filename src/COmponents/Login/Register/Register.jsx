@@ -27,7 +27,7 @@ const Register = () => {
                 // backend
                 const user = { name, email, password, createdAt: createdAt }
 
-                fetch("http://localhost:5000/user", {
+                fetch("https://coffee-server-ccv7ypnby-alamins-projects-a414811e.vercel.app/user", {
                     method: "POST",
                     headers: {
                         "content-type": "application/json",

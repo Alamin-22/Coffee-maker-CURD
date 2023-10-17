@@ -2,11 +2,12 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { AuthContext } from "../../../Provider/AuthProvider";
+import Swal from "sweetalert2";
 
 const LOgin = () => {
     const { LoginUser } = useContext(AuthContext);
     // console.log(LoginUser)
-    const [showPassword, setShowPassword] = useState(null)
+    const [showPassword, setShowPassword] = useState(false)
 
 
 
@@ -19,10 +20,30 @@ const LOgin = () => {
         console.log(email, password);
         // login user
         LoginUser(email, password)
-        .then(res=> console.log(res))
-        .catch(error=>{
-            console.log(error)
-        })
+            .then(res => {
+                console.log(res.user);
+                const user = {
+                    email,
+                    LastLoggedAt: res.user?.metadata?.lastSignInTime
+                    // Update last login
+                }
+                fetch('https://coffee-server-ccv7ypnby-alamins-projects-a414811e.vercel.app/user', {
+                    method: "PATCH",
+                    headers: {
+                        "content-Type": "application/json"
+                    },
+                    body: JSON.stringify(user)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        Swal.fire('Good job!', 'User Login Successfully!', 'success')
+                    })
+            })
+            .catch(error => {
+                console.log(error);
+                Swal.fire('Something wrong!', `${error.message.slice(10, 50)}`, 'error')
+            })
     }
 
 
