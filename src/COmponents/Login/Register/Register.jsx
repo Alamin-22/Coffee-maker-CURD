@@ -3,6 +3,7 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const Register = () => {
     const [showPassword, setShowPassword] = useState(null)
@@ -27,22 +28,35 @@ const Register = () => {
                 // backend
                 const user = { name, email, password, createdAt: createdAt }
 
-                fetch("https://coffee-server-ccv7ypnby-alamins-projects-a414811e.vercel.app/user", {
-                    method: "POST",
-                    headers: {
-                        "content-type": "application/json",
-                    },
-                    body: JSON.stringify(user)
-                })
-                    .then(res => res.json())
+                // using Axiox
+                axios.post("http://localhost:5000/user", user)
                     .then(data => {
-                        if (data.insertedId) {
+                        console.log(data.data);
+                        if (data.data.insertedId) {
                             Swal.fire('Good job!', 'User Created Successfully!', 'success')
                         }
                     })
+
+
+
+
+                // using fetch method
+                // fetch("http://localhost:5000/user", {
+                //     method: "POST",
+                //     headers: {
+                //         "content-type": "application/json",
+                //     },
+                //     body: JSON.stringify(user)
+                // })
+                //     .then(res => res.json())
+                //     .then(data => {
+                //         if (data.insertedId) {
+                //             Swal.fire('Good job!', 'User Created Successfully!', 'success')
+                //         }
+                //     })
             })
             .catch(error => {
-                Swal.fire({ title: 'Sorry!', text: `${error.message.slice(10,60)}`, icon: 'error', })
+                Swal.fire({ title: 'Sorry!', text: `${error.message.slice(10, 60)}`, icon: 'error', })
                 console.log(error)
             })
 

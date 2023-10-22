@@ -13,7 +13,9 @@ import Register from './COmponents/Login/Register/Register.jsx';
 import AuthProvider from './Provider/AuthProvider.jsx';
 import Main from './Layout/Main.jsx';
 import User from './COmponents/Users/User.jsx';
-
+import { QueryClient, QueryClientProvider, } from '@tanstack/react-query';
+import User2 from './COmponents/Users/User2.jsx';
+const queryClient = new QueryClient()
 
 
 const router = createBrowserRouter([
@@ -24,7 +26,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <App></App>,
-        loader: () => fetch("https://coffee-server-ccv7ypnby-alamins-projects-a414811e.vercel.app/coffee")
+        loader: () => fetch("http://localhost:5000/coffee")
       },
       {
         path: "/addcoffee",
@@ -33,7 +35,7 @@ const router = createBrowserRouter([
       {
         path: "/updateCoffee/:id",
         element: <UpdatedCoffee></UpdatedCoffee>,
-        loader: ({ params }) => fetch(`https://coffee-server-ccv7ypnby-alamins-projects-a414811e.vercel.app/coffee/${params.id}`)
+        loader: ({ params }) => fetch(`http://localhost:5000/coffee/${params.id}`)
       },
       {
         path: "/login",
@@ -46,8 +48,12 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <User></User>,
-        loader: () => fetch("https://coffee-server-ccv7ypnby-alamins-projects-a414811e.vercel.app/user"),
-      }
+        loader: () => fetch("http://localhost:5000/user"),
+      },
+      {
+        path: "/user2",
+        element: <User2></User2>,
+      },
 
     ]
   }
@@ -57,7 +63,11 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <AuthProvider><RouterProvider router={router} /></AuthProvider>
-  </React.StrictMode>,
+
+
+  <QueryClientProvider client={queryClient}>
+    <React.StrictMode>
+      <AuthProvider><RouterProvider router={router} /></AuthProvider>
+    </React.StrictMode>,
+  </QueryClientProvider>
 )

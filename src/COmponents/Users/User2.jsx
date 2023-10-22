@@ -1,10 +1,31 @@
-import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-const User = () => {
-    const loadedUser = useLoaderData();
-    const [users, setUsers] = useState(loadedUser);
+const User2 = () => {
+
+
+    const { isPending, isError, error, data: users } = useQuery({
+        queryKey: ["users"],
+        queryFn: async () => {
+            const res = await fetch("http://localhost:5000/user")
+            return res.json();
+        }
+    })
+
+
+
+
+
+    // const [users, setUsers] = useState([]);
+
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/user")
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             setUsers(data)
+    //         })
+    // }, [])
 
 
     const handleDelete = id => {
@@ -35,9 +56,17 @@ const User = () => {
         })
     }
 
+
+    if (isPending) {
+        return <span className="loading loading-ring loading-lg"></span>
+    } else if(isError){
+       return  Swal.fire({ title: 'Error', text: `${error.message}`, icon: 'error', })
+    }
+
+
     return (
         <div>
-            <h1>CReated User Length: {loadedUser.length}</h1>
+            {/* <h1>CReated User Length: {loadedUser.length}</h1> */}
             <div>
                 <div className="overflow-x-auto">
                     <table className="table">
@@ -72,4 +101,4 @@ const User = () => {
     );
 };
 
-export default User;
+export default User2;

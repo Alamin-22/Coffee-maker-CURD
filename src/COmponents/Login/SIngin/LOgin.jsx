@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { AuthContext } from "../../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const LOgin = () => {
     const { LoginUser } = useContext(AuthContext);
@@ -27,18 +28,31 @@ const LOgin = () => {
                     LastLoggedAt: res.user?.metadata?.lastSignInTime
                     // Update last login
                 }
-                fetch('https://coffee-server-ccv7ypnby-alamins-projects-a414811e.vercel.app/user', {
-                    method: "PATCH",
-                    headers: {
-                        "content-Type": "application/json"
-                    },
-                    body: JSON.stringify(user)
-                })
-                    .then(res => res.json())
+
+
+                // axiox
+                axios.patch("http://localhost:5000/user", user)
                     .then(data => {
-                        console.log(data);
+                        console.log(data.data);
                         Swal.fire('Good job!', 'User Login Successfully!', 'success')
+
                     })
+
+
+
+                // using fetch
+                // fetch('http://localhost:5000/user', {
+                //     method: "PATCH",
+                //     headers: {
+                //         "content-Type": "application/json"
+                //     },
+                //     body: JSON.stringify(user)
+                // })
+                //     .then(res => res.json())
+                //     .then(data => {
+                //         console.log(data);
+                //         Swal.fire('Good job!', 'User Login Successfully!', 'success')
+                //     })
             })
             .catch(error => {
                 console.log(error);
